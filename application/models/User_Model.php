@@ -69,6 +69,53 @@ public function upload_a_file($in_title, $file_location, $file_type='*', $out_ti
     } } return $out_title;
   }
   
+  public function upload_multiple_files($in_title, $file_location, $file_type='*', $existing_files = array()) {
+    if (!empty($file_location)){
+        if (!file_exists($file_location)) mkdir($file_location, 0777, true);
+    }
+
+    if (!empty($in_title) && !empty($file_location)) {
+        $uploaded_files = array();
+
+        // Load upload library and initialize configuration
+        $this->load->library('upload');
+
+        // Loop through all files
+        $file_count = count($_FILES[$in_title]['name']);
+        for ($i = 0; $i < $file_count; $i++) {
+            if (!empty($_FILES[$in_title]['name'][$i])) {
+                $_FILES['file']['name'] = $_FILES[$in_title]['name'][$i];
+                $_FILES['file']['type'] = $_FILES[$in_title]['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES[$in_title]['tmp_name'][$i];
+                $_FILES['file']['error'] = $_FILES[$in_title]['error'][$i];
+                $_FILES['file']['size'] = $_FILES[$in_title]['size'][$i];
+
+                $config['upload_path'] = $file_location;
+                $config['allowed_types'] = $file_type;
+                $config['remove_spaces'] = TRUE;
+                $config['file_name'] = $_FILES['file']['name'];
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('file')) {
+                    $uploadData = $this->upload->data();
+                    // Delete the existing file if it exists
+                    if (!empty($existing_files) && in_array($uploadData['file_name'], $existing_files)) {
+                        unlink($config['upload_path'] . $uploadData['file_name']);
+                    }
+                    $uploaded_files[] = $uploadData['file_name'];
+                } else {
+                    // Handle upload error if needed
+                    $error = $this->upload->display_errors();
+                    // You can log or display the error message as needed
+                    echo "Error uploading file: " . $error;
+                }
+            }
+        }
+        return $uploaded_files;
+    }
+}
+
+
 //================================/File Upload==================//
 
 //======================/End================================//
