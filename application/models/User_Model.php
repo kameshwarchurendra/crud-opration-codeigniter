@@ -69,7 +69,7 @@ public function upload_a_file($in_title, $file_location, $file_type='*', $out_ti
     } } return $out_title;
   }
   
-  public function upload_multiple_files($in_title, $file_location, $file_type='*', $existing_files = array()) {
+public function upload_multiple_files($in_title, $file_location, $file_type='*', $existing_files = array()) {
     if (!empty($file_location)){
         if (!file_exists($file_location)) mkdir($file_location, 0777, true);
     }
