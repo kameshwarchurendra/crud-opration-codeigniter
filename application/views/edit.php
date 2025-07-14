@@ -43,7 +43,8 @@ $message = $this->session->flashdata('item');
       <label for="image">Image:</label>
       <input type="file" class="form-control" id="image" value="<?php echo $user[0]->image; ?>" placeholder="Enter Mobile Number" name="image">
     </div><br>
-   
+      <input type="hidden" class="form-control" id="id" value="<?php echo $user[0]->id; ?>" placeholder="Enter Mobile Number" name="id">
+
     <button type="submit" class="btn btn-primary">Update</button>
     <?php } ?>
   </form>
