@@ -34,6 +34,7 @@ public function update(){
                  'mobile'=> $this->input->post('mobile'),
                  'image'=> $this->upload_a_file('image', 'uploads/', 'gif|jpg|png|jpeg')
            );
+	    $this->db->where('id',$this->input->post('id'));
     return $this->db->update('member',$data);
     
 }
